@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -11,7 +12,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index');
+        $users = User::latest()->get();
+
+        return view('user.index', [
+            'users' => $users
+        ]);
     }
 
     /**
@@ -19,7 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.form');
     }
 
     /**
@@ -27,7 +32,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'    => 'required',
+            'email'   => 'required',
+            'address' => 'required'
+        ]);
+
+        $input = $request->all();
+
+        User::create($input);
+
+        return redirect('user.index')->with('status', 'Success create user');
     }
 
     /**
@@ -43,7 +58,11 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+
+        return view('user.form', [
+            'entity' => $user
+        ]);
     }
 
     /**
@@ -51,7 +70,17 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name'    => 'required',
+            'email'   => 'required',
+            'address' => 'required'
+        ]);
+
+        $input = $request->all();
+
+        User::where('id', $id)->update($input);
+
+        return redirect('user.index')->with('status', 'Success edit user');
     }
 
     /**
@@ -59,6 +88,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        User::where('id', $id)->delete();
+
+        return redirect('user.index')->with('status', 'Success delete user');
     }
 }
