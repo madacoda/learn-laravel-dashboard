@@ -53,6 +53,16 @@
                                 @enderror
                             </div>
                             <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                    id="password" placeholder="Enter your password" name="password" id="password">
+                                @error('password')
+                                    <span class="text-danger">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label for="email">Address</label>
                                 <textarea class="form-control @error('address') is-invalid @enderror" rows="3" name="address" id="address"
                                     placeholder="Enter your address"></textarea>
